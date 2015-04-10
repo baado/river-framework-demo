@@ -4,7 +4,7 @@ import lotus.domino.NotesThread;
 
 import org.riverframework.Database;
 import org.riverframework.Document;
-import org.riverframework.DocumentCollection;
+import org.riverframework.DocumentList;
 import org.riverframework.River;
 import org.riverframework.Session;
 import org.riverframework.core.Credentials;
@@ -39,11 +39,12 @@ import org.riverframework.core.Credentials;
 
 public class AddressBook {
 	private static final String filepath = "PeopleAddressBook.nsf";
+	private static final String module = River.MODULE_LOTUS_DOMINO;
 
 	public static void main(String[] args) {
 		NotesThread.sinitThread();
 		
-		Session session = River.getInstance().getSession(River.MODULE_LOTUS_DOMINO, null, null, Credentials.getPassword());
+		Session session = River.getSession(module, null, null, Credentials.getPassword());
 		Database database = session.getDatabase(PeopleDatabase.class, "", filepath);
 
 		System.out.println("User=" + session.getUserName());
@@ -54,7 +55,7 @@ public class AddressBook {
 
 		// Creating three persons
 		 
-		Person jd = (Person) database.createDocument(Person.class)
+		Person jd = database.createDocument(Person.class)
 		.setField("Name", "John Doe")
 		.setField("Age", 35)
 		.generateId()
@@ -79,7 +80,7 @@ public class AddressBook {
 		// Searching
 		String query = "Doe";
 		System.out.println("searching for '" + query + "'...");
-		DocumentCollection col = database.search(query);
+		DocumentList col = database.search(query);
 				
 		// Printing the results
 		System.out.println("Found " + col.size() + " persons.");
@@ -114,6 +115,8 @@ public class AddressBook {
 		
 		System.out.println("Done.");
 
+		River.closeSession(River.MODULE_LOTUS_DOMINO);
+		
 		NotesThread.stermThread();
 	}
 }
