@@ -22,7 +22,7 @@ import org.riverframework.core.Session;
  */
 
 public class AddressBookDemo {
-	private static final String filepath = "RiverFramework_Test_PAB_5.nsf";
+	private static final String filepath = "RiverFramework_Test_PAB_6.nsf";
 
 	public static void main(String[] args) {
 		// *** Getting the password
@@ -98,9 +98,11 @@ public class AddressBookDemo {
 		// Printing the results
 		System.out.println("Found:");
 
+		System.out.println("");
+		System.out.println("(ID) FULL NAME: EMAIL");
 		for(Document doc : it) {
 			Person p = doc.getAs(Person.class);
-			System.out.println("* " + p.getFieldAsString("FullName") + ": " + p.getFieldAsString("InternetAddress"));
+			System.out.println("(" + p.getId() + ") " + p.getFieldAsString("FullName") + ": " + p.getFieldAsString("InternetAddress"));
 		}
 
 		// *** Finding who has an specific id		
