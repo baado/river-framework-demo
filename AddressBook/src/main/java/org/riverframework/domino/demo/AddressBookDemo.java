@@ -25,27 +25,12 @@ public class AddressBookDemo {
 	private static final String filepath = "RiverFramework_Test_PAB_6.nsf";
 
 	public static void main(String[] args) {
-		// *** Getting the password
-		Options options = new Options();
-		options.addOption("password", true, "the password of the last active id file on IBM Notes");
-
-		CommandLineParser parser = new DefaultParser();
-		CommandLine line = null;
-		try {
-			line = parser.parse( options, args );
-		}
-		catch( ParseException exp ) {
-			System.err.println( "Parsing failed.  Reason: " + exp.getMessage() );
-		}
-
-		String password = line.getOptionValue("password");
-
 		// *** Initializing the Notes Thread (required for stand-alone Java applications)
 		NotesThread.sinitThread();
 
 		// *** Opening a IBM Notes Session
-		Session session = River.getSession(River.LOTUS_DOMINO, null, null, password);
-		System.out.println("User=" + session.getUserName());
+		Session session = River.getSession(River.LOTUS_DOMINO, null, null, getPassword(args));
+		System.out.println("Session opened: " + session.getUserName());
 
 		// *** Opening/creating the test database
 
@@ -62,12 +47,15 @@ public class AddressBookDemo {
 				return;
 			}
 		}
-		System.out.println("Database=" + database.getName());
+		System.out.println("Database opened: " + database.getName());
+		System.out.println("");
 	
-		// *** Deleting everything
+		// *** Deleting all documents
+		System.out.println("Deleting any existent document...");
 		database.getAllDocuments().deleteAll();
 
-		// *** Creating a five hundred of persons
+		// *** Creating five hundred person documents
+		System.out.println("Creating documents with random data...");
 		for (int i = 0; i < 500; i++) {
 
 			//Getting some random values 
@@ -124,5 +112,24 @@ public class AddressBookDemo {
 		NotesThread.stermThread();
 
 		System.out.println("Done.");
+	}
+	
+	private static String getPassword(String[] args) {
+		// *** Getting the password
+		Options options = new Options();
+		options.addOption("password", true, "the password of the last active id file on IBM Notes");
+
+		CommandLineParser parser = new DefaultParser();
+		CommandLine line = null;
+		try {
+			line = parser.parse( options, args );
+		}
+		catch( ParseException exp ) {
+			System.err.println( "Parsing failed.  Reason: " + exp.getMessage() );
+		}
+
+		String password = line.getOptionValue("password");
+		
+		return password;
 	}
 }
