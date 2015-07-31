@@ -7,11 +7,11 @@ class Person extends AbstractIndexedDocument<Person> {
 	protected Person(Database database, org.riverframework.wrapper.Document<?> _doc) {
 		super(database, _doc);
 	}
-	
+
 	@Override
 	public String getIdField() {
 		/*
-		 * This is the field name whose value will be used as key in each 
+		 * Required. This is the field name whose value will be used as key in each 
 		 * document and the index.
 		 */
 		return "fi_ShortName";
@@ -20,28 +20,37 @@ class Person extends AbstractIndexedDocument<Person> {
 	@Override
 	public String getIndexName() {
 		/*
-		 * This is the index name that will be used. 
+		 * Required. This is the index name that will be used. 
 		 */
 		return "vi_persons";
 	}
 
 	@Override
 	public String getTableName() {
+		/*
+		 * Required. This is the value that will group all the documents. In
+		 * IBM Notes terms, this is the value of the Form field.
+		 */
 		return "fo_person";
 	}
-	
+
 	@Override
 	protected String[] getParametersToCreateIndex() {
+		/*
+		 * Required. If the index could not be found, this method returns the 
+		 * parameters to create it. Take note of the query to select only the 
+		 * Person documents. 
+		 */
 		return new String[] {getIndexName(), "Form=\"" + getTableName() + "\""};
 	}
 
 	@Override
 	public Person afterCreate() {
-		/* This method is optional. It's useful for do something every time
+		/* 
+		 * This method is optional. It's useful for do something every time
 		 * a document is created. In this demo, we will set a 'location' field
 		 * to be sure that always be set. 
-		 */	 
-
+		 */
 		_doc.setField("fi_Location", "NY");
 
 		return getThis();
@@ -49,7 +58,8 @@ class Person extends AbstractIndexedDocument<Person> {
 
 	@Override
 	public Person generateId() {
-		/* This method is optional. You can set the Id using setId(), 
+		/* 
+		 * This method is optional. You can set the Id using setId(), 
 		 * but you can use this method to calculate it any time.  
 		 */
 
@@ -77,7 +87,9 @@ class Person extends AbstractIndexedDocument<Person> {
 
 	@Override
 	protected Person getThis() {
-		// Used for method chaining
+		/*
+		 *  Required. Used for method chaining
+		 */
 		return this;
 	}
 

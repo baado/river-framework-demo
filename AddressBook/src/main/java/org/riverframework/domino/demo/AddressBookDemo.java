@@ -13,16 +13,20 @@ import org.riverframework.core.DocumentIterator;
 import org.riverframework.core.IndexedDatabase;
 import org.riverframework.core.Session;
 
-/**
+/*
  * To run this demo, you will need:
  * 
  * - IBM Notes installed in your computer
  * - Eclipse with maven support
  *    
+ *  The command line is:   
+ *  java -cp . AddressBookDemo -password PASSWORD
+ *  
+ *  PASSWORD is the same used for open a session in IBM Notes, the last time you used it.
+ *    
  */
-
 public class AddressBookDemo {
-	private static final String filepath = "RiverFramework_Test_PAB_6.nsf";
+	private static final String filepath = "RiverFramework_AddressBookDemo.nsf";
 
 	public static void main(String[] args) {
 		// *** Initializing the Notes Thread (required for stand-alone Java applications)
