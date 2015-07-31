@@ -8,6 +8,6 @@ This is an Eclipse Project of a stand-alone Java program. It creates a local IBM
 Features:
 - It shows how to define a database (`AddressBook.class`) for an indexed document (`Person.class`)
 - The `Person.java` file has defined all required and some optional methods.
-- The `AddressBook-java` file has the minimum to use it with indexed documents. 
+- The `AddressBook.java` file has the minimum to use it with indexed documents. 
 
 
