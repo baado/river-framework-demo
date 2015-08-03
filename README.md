@@ -14,7 +14,7 @@ Features:
 #### How install the demo?
 You will need:
 - An IBM Lotus Notes client installed. The Domino server is not necessary.
-- Eclipse IDE for Java developers (I use [Luna](http://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/marsr)
+- Eclipse IDE for Java developers (I use [Luna](http://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/marsr))
   
 About the demo:
 - Create a Git clone or just download it as a ZIP file
