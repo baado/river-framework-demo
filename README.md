@@ -11,3 +11,15 @@ Features:
 - The `AddressBook.java` file has the minimum to use it with indexed documents. 
 
 
+#### How install the demo?
+You will need:
+- An IBM Lotus Notes client installed. The Domino server is not necessary.
+- Eclipse IDE for Java developers (I use [Luna](http://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/marsr)
+  
+About the demo:
+- Create a Git clone or just download it as a ZIP file
+- In Eclipse, import the project 
+- Download the Maven artifacts
+- Run it :-)
+ 
+If you have any question or comment, please write me to [mario.sotil@gmail.com](mailto:mario.sotil@gmail.com)
