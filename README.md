@@ -1,5 +1,5 @@
 # river-framework-demo
-Demos for the [River Framework](https://github.com/mariosotil/river-framework) project
+Demos for the River Framework project, an Object Document Mapper Framework written in Java. You can check its [website](http://www.riverframework.org/) ot its GitHub [repository](https://github.com/mariosotil/river-framework).
 
 
 #### Address Book
