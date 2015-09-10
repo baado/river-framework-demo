@@ -6,7 +6,25 @@ import org.riverframework.core.Document;
 import org.riverframework.core.Session;
 
 /**
- * This is a 
+ * Getting Started with IBM Notes
+ * ==============================
+ * 
+ * This is a basic script that opens a session, creates a test database,
+ * creates a document, set a simple value and retrieves it again. Also, 
+ * says "Hello" :-)
+ * 
+ * To compile it, just use this command:
+ * 
+ * javac -cp .\*;C:\IBM\Notes\jvm\lib\ext\Notes.jar GettingStarted.java
+ * 
+ * To execute it:
+ * 
+ * java -cp .;.\*;C:\IBM\Notes\jvm\lib\ext\Notes.jar GettingStarted mypassword
+ * 
+ * Of course, you must change the location of Notes.jar, depending where you 
+ * installed IBM Notes. Also, mypassword is the password that you are using to 
+ * open IBM Notes. More exactly, the password to open your ID file.  
+ * 
  * 
  * @author mario.sotil
  *
