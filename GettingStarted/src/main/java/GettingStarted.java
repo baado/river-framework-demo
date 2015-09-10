@@ -5,6 +5,12 @@ import org.riverframework.core.DefaultDatabase;
 import org.riverframework.core.Document;
 import org.riverframework.core.Session;
 
+/**
+ * This is a 
+ * 
+ * @author mario.sotil
+ *
+ */
 public class GettingStarted {
 
 	public static void main(String[] args) {
@@ -45,6 +51,7 @@ public class GettingStarted {
 
 		// Saving a new document
 		Document doc = database.createDocument().setField("Greetings", "Hello World!").save();
+		
 		// Retrieving its id 		
 		String id = doc.getObjectId();
 		System.out.println("Document created");
@@ -52,7 +59,7 @@ public class GettingStarted {
 		// Getting the document again with this id...
 		Document doc2 = database.getDocument(id);
 		// ... and we say hello :-)
-		System.out.println("*** River says " + doc2.getFieldAsString("Greetings"));
+		System.out.println("*** River Framework says " + doc2.getFieldAsString("Greetings"));
 
 		// *** Closing the session
 		River.closeSession(River.LOTUS_DOMINO);
