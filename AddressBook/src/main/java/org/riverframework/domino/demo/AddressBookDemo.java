@@ -77,11 +77,8 @@ public class AddressBookDemo {
 			.save();
 		}
 
-		// *** Creating the search index 
-		database.refreshSearchIndex(true);
-
 		// *** Searching for people with a last name 'Thomas'
-		String query = "Thomas";
+		String query = "FirstName=\"Thomas\"";
 
 		System.out.println("");
 		System.out.println("Searching for '" + query + "'...");
