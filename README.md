@@ -12,7 +12,7 @@ You will find a presentation about the project at its [website](http://www.river
 
 ## Demo: Getting Started
 
-If the same demo explained at the [Getting Started](https://github.com/mariosotil/river-framework-documentation/blob/master/getting-started.md) document, but it was written as a Maven Project.
+It's the same demo explained at the [Getting Started](https://github.com/mariosotil/river-framework-documentation/blob/master/getting-started.md) document, but this was written as a Maven Project.
 
 Features:
 - It is a basic program that opens an IBM Notes session, creates a test database, creates a document, set a simple value and retrieves it again. Also, says "Hello world!" :-)  
@@ -30,13 +30,14 @@ Features:
 
 ## How install a demo?
 You will need:
-- An IBM Lotus Notes client installed. The Domino server is not necessary.
+- Java 1.6+ JDK
+- IBM Notes 8.5+ client installed. The IBM Domino server is not necessary.
 - Eclipse IDE for Java developers (I use [Luna](http://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/marsr))
   
-About the demo:
+To import the demos:
 - Create a Git clone or just download it as a ZIP file
-- In Eclipse, import the project 
-- Download the Maven artifacts
-- Run it :-)
+- In Eclipse, import the project that you want to test
+- Download the River Framework artifacts using Maven
+- Run
  
 If you have any question or comment, please write me to [mario.sotil@gmail.com](mailto:mario.sotil@gmail.com)
