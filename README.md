@@ -1,8 +1,12 @@
+<img src="http://www.riverframework.org/images/river-header.png" /><br/>
 # river-framework-demo
-Demos for the River Framework project, an Object Document Mapper Framework written in Java. You can check its [website](http://www.riverframework.org/) ot its GitHub [repository](https://github.com/mariosotil/river-framework).
+
+[![Project Stats](https://www.openhub.net/p/river-framework/widgets/project_thin_badge.gif)](https://www.openhub.net/p/river-framework)
+
+Demos for the River Framework project, an Object Document Mapper Framework written in Java. You will find a presentation about the project at its [website](http://www.riverframework.org/). About source code, current features, known issues, next features, etc., please visit its GitHub [repo](https://github.com/mariosotil/river-framework).
 
 
-#### Address Book
+## Demo: Address Book
 This is an Eclipse Project of a stand-alone Java program. It creates a local IBM Notes database, populates it with random data, and do a simple search. 
 
 Features:
