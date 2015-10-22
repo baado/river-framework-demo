@@ -26,7 +26,7 @@ class Person extends AbstractIndexedDocument<Person> {
 	}
 
 	@Override
-	public String getTableName() {
+	public String getBinder() {
 		/*
 		 * Required. This is the value that will group all the documents. In
 		 * IBM Notes terms, this is the value of the Form field.
@@ -41,7 +41,7 @@ class Person extends AbstractIndexedDocument<Person> {
 		 * parameters to create it. Take note of the query to select only the 
 		 * Person documents. 
 		 */
-		return new String[] {getIndexName(), "Form=\"" + getTableName() + "\""};
+		return new String[] {getIndexName(), "Form=\"" + getBinder() + "\""};
 	}
 
 	@Override
