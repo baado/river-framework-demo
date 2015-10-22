@@ -1,0 +1,25 @@
+@(persons: List[Person])
+@main("Persons list") {
+<h2>All persons</h2>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>e-mail</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for(person <- persons) {
+    <tr>
+        <td><a href="@routes.Persons.details(person.personId)">
+            @person.personId</a></td>
+        <td><a href="@routes.Persons.details(person.personId)">
+            @person.name</a></td>
+        <td><a href="@routes.Persons.details(person.personId)">
+            @person.email</a></td>
+    </tr>
+    }
+    </tbody>
+</table>
+}
