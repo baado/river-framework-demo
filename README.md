@@ -43,7 +43,7 @@ Features:
 - It opens a test database. If it does not exist, the application will create and populate it with random data.
 - The `Person.java` file has defined all required and some optional methods.
 - The `AddressBook.java` file has the minimum to use it with indexed documents. 
-- **It's in construction!** So far, the application only shows the database data in this URL: http://127.0.0.1/persons/
+- **It's under construction!** So far, the application only shows the database data in this URL: http://127.0.0.1/persons/
 
 Requirements:
 - Java 1.8+ JDK
