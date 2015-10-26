@@ -42,9 +42,7 @@ public class Person {
     public static Person findById(Connection conn, String id) {
 
         Database db = conn.getDatabase();
-        Logger.info(String.format("id=%s", id));
         data.Person _person = db.getDocument(data.Person.class, id);
-        Logger.info(String.format("opened=%s", _person.isOpen() ? "true" : "false"));
         return _person.isOpen() ? new Person(_person) : null;
     }
 
@@ -70,6 +68,7 @@ public class Person {
             // It's a new _person document
             _person = db.createDocument(data.Person.class)
                     .generateId();
+            id = _person.getId();
 
         } else {
             // We're updating a document
