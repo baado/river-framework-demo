@@ -1,8 +1,8 @@
-package project;
+package data;
 
 import java.util.Random;
 
-public class RandomValues {
+public class RandomValuesHelper {
 	private static final String[] firstNames = new String[50];
 	private static final String[] lastNames = new String[20];
 	private static final String[] domains = new String[140];	

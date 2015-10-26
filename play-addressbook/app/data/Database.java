@@ -1,12 +1,11 @@
-package project;
+package data;
 
-import models.Person;
 import org.riverframework.core.AbstractIndexedDatabase;
 import org.riverframework.core.DefaultCounter;
 import org.riverframework.core.Session;
 
-public class AddressBook extends AbstractIndexedDatabase<AddressBook> {
-	protected AddressBook(Session session, org.riverframework.wrapper.Database<?> _database) {
+public class Database extends AbstractIndexedDatabase<Database> {
+	protected Database(Session session, org.riverframework.wrapper.Database<?> _database) {
 		super(session, _database);
 
 		/*
@@ -18,7 +17,7 @@ public class AddressBook extends AbstractIndexedDatabase<AddressBook> {
 	}
 
 	@Override
-	protected AddressBook getThis() {
+	protected Database getThis() {
 		return this;
 	}
 

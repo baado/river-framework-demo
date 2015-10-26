@@ -1,131 +1,97 @@
 package models;
 
-import org.riverframework.core.AbstractIndexedDocument;
+import data.Connection;
 import org.riverframework.core.Database;
 import org.riverframework.core.Document;
-import play.ApplicationLoader;
-import play.DefaultApplication;
+import play.Logger;
+import play.data.validation.Constraints;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Person extends AbstractIndexedDocument<Person> {
-	// *** Play framework section
+public class Person {
 
-	public String personId;
-	public String name;
-	public String email;
+    public String id;
+    @Constraints.Required
+    public String firstName;
+    @Constraints.Required
+    public String lastName;
+    @Constraints.Required
+    public String email;
 
-    public List<Person> findAll() {
-        List<Person> list = new ArrayList<>();
+    private data.Person person;
+    private Connection conn;
 
+    public Person() {
 
-        for (Document doc: getDatabase().getAllDocuments()) {
-            Person person = doc.getAs(Person.class);
-            list.add(person);
-        }
-
-        return list;
     }
 
-    // *** Play framework AND River framework section
+    public static List<Person> listAll(Connection conn) {
+        List<Person> persons = new ArrayList<>();
 
-    protected Person(Database database, org.riverframework.wrapper.Document<?> _doc) {
+        Database db = conn.getDatabase();
 
-        super(database, _doc);
+        for (Document doc: db.getView(db.getClosedDocument(data.Person.class).getIndexName()).getAllDocuments()) {
+            data.Person _person = doc.getAs(data.Person.class);
+            persons.add(new models.Person(_person));
+        }
 
-        if (_doc != null) {
-            this.personId = getId();
-            this.name = getFieldAsString("FullName");
-            this.email = getFieldAsString("InternetAddress");
+        return persons;
+    }
+
+    public static Person findById(Connection conn, String id) {
+
+        Database db = conn.getDatabase();
+        Logger.info(String.format("id=%s", id));
+        data.Person _person = db.getDocument(data.Person.class, id);
+        Logger.info(String.format("opened=%s", _person.isOpen() ? "true" : "false"));
+        return _person.isOpen() ? new Person(_person) : null;
+    }
+
+    public Person(data.Person _person) {
+        person = _person;
+
+        if (_person != null && _person.isOpen()) {
+            id = _person.getId();
+            firstName = _person.getFieldAsString("FirstName");
+            lastName = _person.getFieldAsString("LastName");
+            email = _person.getFieldAsString("InternetAddress");
         }
     }
 
-	// *** River framework section
+    public Person setConnection(Connection conn) {
+        this.conn = conn;
+        return this;
+    }
 
-	@Override
-	public String getIdField() {
-		/*
-		 * Required. This is the field name whose value will be used as key in each 
-		 * document and the index.
-		 */
-		return "fi_ShortName";
-	}
+    public void save() {
+        Database db = conn.getDatabase();
+        if (id == null || id.equals("")) {
+            // It's a new person document
+            person = db.createDocument(data.Person.class)
+                    .generateId();
 
-	@Override
-	public String getIndexName() {
-		/*
-		 * Required. This is the index name that will be used. 
-		 */
-		return "vi_persons";
-	}
+        } else {
+            // We're updating a document
+            if (person == null || !person.isOpen()) {
+                // ... but the person document still was not loaded
+                person = db.getDocument(data.Person.class, id);
+                if (!person.isOpen()) {
+                    Logger.error(String.format("It could not be possible to open a document with the id %s", id));
+                    return;
+                }
+            }
+        }
 
-	// @Override
-	public String getBinder() {
-		/*
-		 * Required. This is the value that will group all the documents. In
-		 * IBM Notes terms, this is the value of the Form field.
-		 */
-		return "fo_person";
-	}
+        person.setField("FirstName", firstName)
+                .setField("LastName", lastName)
+                .setField("FullName", String.format("%s %s", firstName, lastName))
+                .setField("InternetAddress", email)
+                .save();
 
-	@Override
-	protected String[] getParametersToCreateIndex() {
-		/*
-		 * Required. If the index could not be found, this method returns the 
-		 * parameters to create it. Take note of the query to select only the 
-		 * Person documents. 
-		 */
-		return new String[] {getIndexName(), "Form=\"" + getBinder() + "\""};
-	}
+    }
 
-	@Override
-	public Person afterCreate() {
-		/* 
-		 * This method is optional. It's useful for do something every time
-		 * a document is created. In this demo, we will set a 'location' field
-		 * to be sure that always be set. 
-		 */
-		_doc.setField("fi_Location", "NY");
-
-		return getThis();
-	}
-
-	@Override
-	public Person generateId() {
-		/* 
-		 * This method is optional. You can set the Id using setId(), 
-		 * but you can use this method to calculate it any time.  
-		 */
-
-		// This values are only to generate the id as an hex number
-		final int BASE_COUNTER = 16;
-		final int LENGTH_COUNTER = 4;
-		final long MIN_COUNTER = (long) Math.pow(BASE_COUNTER, LENGTH_COUNTER - 1) - 1;
-
-		// If there is no an id defined, then we generate it
-		if (getId().equals("")) {
-			/* Getting a number from the counter using as key the string "KEY_PERSON"
-			 * You can use any key to be sure that you will always get a unique number
-			 * for the different situations 
-			 */
-			long id = getDatabase().getCounter("KEY_PERSON").getCount();
-
-			// The count will start in MIN_COUNTER
-			id += MIN_COUNTER;
-
-			// Setting the index field. e.g. P10F7
-			setId("P" + Long.toString(id, BASE_COUNTER).toUpperCase());
-		}
-		return getThis();
-	}
-
-	@Override
-	protected Person getThis() {
-		/*
-		 *  Required. Used for method chaining
-		 */
-		return this;
-	}
-
+    public String toString() {
+        return String.format("%s %s (%s)", firstName, lastName, id);
+    }
 }

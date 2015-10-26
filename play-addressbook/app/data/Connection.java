@@ -1,7 +1,6 @@
-package project;
+package data;
 
 import lotus.notes.NotesThread;
-import models.Person;
 import org.riverframework.River;
 import org.riverframework.core.IndexedDatabase;
 import org.riverframework.core.Session;
@@ -16,13 +15,13 @@ import javax.inject.Singleton;
  * Created by mario.sotil on 10/20/2015.
  */
 @Singleton
-public class DatabaseConnection {
+public class Connection {
 
     private Session session;
     private IndexedDatabase database;
 
     @Inject
-    public DatabaseConnection(ApplicationLifecycle lifecycle) {
+    public Connection(ApplicationLifecycle lifecycle) {
         String server = (String) null;
         String username = (String) null;
         String password = "passw0rd";
@@ -48,11 +47,11 @@ public class DatabaseConnection {
         Logger.info("River session opened: " + session.getUserName());
 
         // Opening the database
-        database = session.getDatabase(AddressBook.class, "", filepath);
+        database = session.getDatabase(Database.class, "", filepath);
 
         // If not, then we create a new one
         if (!database.isOpen()) {
-            database = session.createDatabase(AddressBook.class, "", filepath);
+            database = session.createDatabase(Database.class, "", filepath);
 
             if (!database.isOpen()) {
                 Logger.error("I could not create the test database at the local client, with the name '" + filepath + "'");
@@ -64,9 +63,9 @@ public class DatabaseConnection {
                 for (int i = 0; i < 500; i++) {
 
                     //Getting some random values
-                    String name = RandomValues.getAFirstName();
-                    String lastName = RandomValues.getALastName();
-                    String domain = RandomValues.getADomain();
+                    String name = RandomValuesHelper.getAFirstName();
+                    String lastName = RandomValuesHelper.getALastName();
+                    String domain = RandomValuesHelper.getADomain();
 
                     //Saving as a new document
                     database.createDocument(Person.class)

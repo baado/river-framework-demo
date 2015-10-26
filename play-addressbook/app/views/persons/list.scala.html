@@ -1,6 +1,7 @@
 @(persons: List[Person])
 @main("Persons list") {
 <h2>All persons</h2>
+<a class="btn btn-primary" href="@routes.Persons.newPerson()">New person</a>
 <table class="table table-striped">
     <thead>
     <tr>
@@ -12,11 +13,11 @@
     <tbody>
     @for(person <- persons) {
     <tr>
-        <td><a href="@routes.Persons.details(person.personId)">
-            @person.personId</a></td>
-        <td><a href="@routes.Persons.details(person.personId)">
-            @person.name</a></td>
-        <td><a href="@routes.Persons.details(person.personId)">
+        <td><a href="@routes.Persons.details(person.id)">
+            @person.id</a></td>
+        <td><a href="@routes.Persons.details(person.id)">
+            @person.lastName, @person.firstName</a></td>
+        <td><a href="@routes.Persons.details(person.id)">
             @person.email</a></td>
     </tr>
     }

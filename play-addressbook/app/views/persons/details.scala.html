@@ -1,0 +1,17 @@
+@(personForm: Form[Person])
+@import helper._
+
+@main("Person form") {
+<h1>Person form</h1>
+@helper.form(action = routes.Persons.save()) {
+<fieldset>
+    <legend>Person @personForm("firstName").valueOr("New") @personForm("lastName").valueOr("") @personForm("id").valueOr("")</legend>
+    <input type="hidden" name="id" value="@personForm("id").valueOr("")" />
+    @helper.inputText(personForm("lastName"),'_label -> "Last Name")
+    @helper.inputText(personForm("firstName"),'_label -> "First Name")
+    @helper.inputText(personForm("email"), '_label -> "email")
+</fieldset>
+<input type="submit" class="btn btn-primary" value="Save">
+<a class="btn" href="@routes.Persons.list()">Cancel</a>
+}
+}

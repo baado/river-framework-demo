@@ -4,10 +4,11 @@ import lotus.domino.NotesThread;
 import models.Person;
 import org.riverframework.core.Database;
 import org.riverframework.core.Document;
+import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import project.DatabaseConnection;
-import views.html.persons.list;
+import data.Connection;
+import views.html.persons.*;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -19,19 +20,14 @@ import java.util.List;
 public class Persons extends Controller {
 
     @Inject
-    DatabaseConnection conn;
+    Connection conn;
+
+    private final Form<Person> personForm = Form.form(Person.class);
 
     public Result list() {
         NotesThread.sinitThread();
 
-        List<Person> persons = new ArrayList<>();
-
-        Database db = conn.getDatabase();
-
-        for (Document doc: db.getAllDocuments()) {
-            Person person = doc.getAs(Person.class);
-            persons.add(person);
-        }
+        List<Person> persons = Person.listAll(conn);
 
         NotesThread.stermThread();
 
@@ -39,14 +35,40 @@ public class Persons extends Controller {
     }
 
     public Result newPerson() {
-        return TODO;
+        return ok(details.render(personForm));
     }
 
     public Result details(String id) {
-        return TODO;
+        NotesThread.sinitThread();
+
+        final Person person = Person.findById(conn, id);
+        if (person == null) {
+            flash("error", String.format("Person with id %s does not exist.", id));
+            return redirect(routes.Persons.list());
+        }
+        Form<Person> filledForm = personForm.fill(person);
+
+        NotesThread.stermThread();
+
+        return ok(details.render(filledForm));
+
     }
 
     public Result save() {
-        return TODO;
+        NotesThread.sinitThread();
+
+        Form<Person> boundForm = personForm.bindFromRequest();
+        if (boundForm.hasErrors()) {
+            flash("error", "Please correct the form below.");
+            return badRequest(details.render(boundForm));
+        }
+
+        Person person = boundForm.get();
+        person.setConnection(conn).save();
+
+        NotesThread.stermThread();
+
+        flash("success", String.format("Successfully added person %s", person));
+        return redirect(routes.Persons.list());
     }
 }
