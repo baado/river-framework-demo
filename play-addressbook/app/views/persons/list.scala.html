@@ -1,24 +1,38 @@
 @(persons: List[Person])
 @main("Persons list") {
 <h2>All persons</h2>
-<a class="btn btn-primary" href="@routes.Persons.newPerson()">New person</a>
+<script>
+    function del(urlToDelete) {
+        $.ajax({
+            url: urlToDelete,
+            type: 'DELETE',
+            success: function(results) {
+                // Refresh the page
+                location.reload();
+            }
+        });
+    }
+</script>
+<a href="@routes.Persons.newPerson()" class="btn"><span class="glyphicon glyphicon-plus"></span> New person</a>
 <table class="table table-striped">
     <thead>
     <tr>
         <th>Id</th>
         <th>Name</th>
         <th>e-mail</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
     @for(person <- persons) {
     <tr>
-        <td><a href="@routes.Persons.details(person.id)">
-            @person.id</a></td>
-        <td><a href="@routes.Persons.details(person.id)">
-            @person.lastName, @person.firstName</a></td>
-        <td><a href="@routes.Persons.details(person.id)">
-            @person.email</a></td>
+        <td><a href="@routes.Persons.details(person.id)">@person.id</a></td>
+        <td><a href="@routes.Persons.details(person.id)">@person.firstName @person.lastName</a></td>
+        <td><a href="@routes.Persons.details(person.id)">@person.email</a></td>
+        <td>
+            <a href="@routes.Persons.details(person.id)"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a onclick="javascript:del('@routes.Persons.delete(person.id)')"><span class="glyphicon glyphicon-trash"></span></a>
+        </td>
     </tr>
     }
     </tbody>

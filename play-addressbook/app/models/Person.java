@@ -19,7 +19,7 @@ public class Person {
     @Constraints.Required
     public String email;
 
-    private data.Person person;
+    private data.Person _person;
     private Connection conn;
 
     public Person() {
@@ -49,7 +49,7 @@ public class Person {
     }
 
     public Person(data.Person _person) {
-        person = _person;
+        this._person = _person;
 
         if (_person != null && _person.isOpen()) {
             id = _person.getId();
@@ -67,28 +67,33 @@ public class Person {
     public void save() {
         Database db = conn.getDatabase();
         if (id == null || id.equals("")) {
-            // It's a new person document
-            person = db.createDocument(data.Person.class)
+            // It's a new _person document
+            _person = db.createDocument(data.Person.class)
                     .generateId();
 
         } else {
             // We're updating a document
-            if (person == null || !person.isOpen()) {
-                // ... but the person document still was not loaded
-                person = db.getDocument(data.Person.class, id);
-                if (!person.isOpen()) {
+            if (_person == null || !_person.isOpen()) {
+                // ... but the _person document still was not loaded
+                _person = db.getDocument(data.Person.class, id);
+                if (!_person.isOpen()) {
                     Logger.error(String.format("It could not be possible to open a document with the id %s", id));
                     return;
                 }
             }
         }
 
-        person.setField("FirstName", firstName)
+        _person.setField("FirstName", firstName)
                 .setField("LastName", lastName)
                 .setField("FullName", String.format("%s %s", firstName, lastName))
                 .setField("InternetAddress", email)
                 .save();
 
+    }
+
+    public void remove() {
+        _person.delete();
+        _person = null;
     }
 
     public String toString() {

@@ -71,4 +71,20 @@ public class Persons extends Controller {
         flash("success", String.format("Successfully added person %s", person));
         return redirect(routes.Persons.list());
     }
+
+    public Result delete(String id) {
+        NotesThread.sinitThread();
+
+        final Person person = Person.findById(conn, id);
+        if(person == null) {
+            flash("error", String.format("Person with id %s does not exist.", id));
+            return redirect(routes.Persons.list());
+        }
+        person.remove();
+
+        NotesThread.stermThread();
+
+        flash("success", String.format("Successfully removed person %s", person));
+        return redirect(routes.Persons.list());
+    }
 }
