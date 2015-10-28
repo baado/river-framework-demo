@@ -4,11 +4,8 @@ import org.riverframework.core.AbstractIndexedDocument;
 import org.riverframework.core.Database;
 
 public class Person extends AbstractIndexedDocument<Person> {
-    // *** Play framework AND River framework section
 
     protected Person(Database database, org.riverframework.wrapper.Document<?> _doc) { super(database, _doc); }
-
-	// *** River framework section
 
 	@Override
 	public String getIdField() {

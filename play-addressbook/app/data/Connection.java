@@ -4,7 +4,9 @@ import lotus.notes.NotesThread;
 import org.riverframework.River;
 import org.riverframework.core.IndexedDatabase;
 import org.riverframework.core.Session;
+import play.Configuration;
 import play.Logger;
+import play.Play;
 import play.inject.ApplicationLifecycle;
 import play.libs.F;
 
@@ -22,10 +24,15 @@ public class Connection {
 
     @Inject
     public Connection(ApplicationLifecycle lifecycle) {
+        Configuration conf = Play.application().configuration();
+
         String server = (String) null;
         String username = (String) null;
-        String password = "passw0rd";
-        String filepath = "d:\\test-play-database.nsf";
+        String password = conf.getString("river.addressbook.password");
+        String filepath = conf.getString("river.addressbook.filepath");
+
+        Logger.info("password=" + password);
+        Logger.info("filepath=" + filepath);
 
         // Creating a new Notes thread
         NotesThread.sinitThread();
