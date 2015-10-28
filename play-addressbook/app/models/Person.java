@@ -1,15 +1,24 @@
 package models;
 
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.AssistedInject;
 import data.Connection;
 import org.riverframework.core.Database;
 import org.riverframework.core.Document;
 import play.Logger;
+import play.Play;
 import play.data.validation.Constraints;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Person {
+public class Person implements PersonInterface {
+
+    private Connection conn;
+    private data.Person _person;
+
+    @Inject private PersonFactory personFactory;
 
     public String id;
     @Constraints.Required
@@ -19,35 +28,19 @@ public class Person {
     @Constraints.Required
     public String email;
 
-    private data.Person _person;
-    private Connection conn;
+    private void setConn() {
+        conn = Play.application().injector().instanceOf(Connection.class);
+    }
 
     public Person() {
-
+        setConn();
     }
 
-    public static List<Person> listAll(Connection conn) {
-        List<Person> persons = new ArrayList<>();
+    @AssistedInject
+    public Person(@Assisted Document doc) {
+        setConn();
 
-        Database db = conn.getDatabase();
-
-        for (Document doc: db.getView(db.getClosedDocument(data.Person.class).getIndexName()).getAllDocuments()) {
-            data.Person _person = doc.getAs(data.Person.class);
-            persons.add(new models.Person(_person));
-        }
-
-        return persons;
-    }
-
-    public static Person findById(Connection conn, String id) {
-
-        Database db = conn.getDatabase();
-        data.Person _person = db.getDocument(data.Person.class, id);
-        return _person.isOpen() ? new Person(_person) : null;
-    }
-
-    public Person(data.Person _person) {
-        this._person = _person;
+        _person = doc.getAs(data.Person.class);
 
         if (_person != null && _person.isOpen()) {
             id = _person.getId();
@@ -57,9 +50,23 @@ public class Person {
         }
     }
 
-    public Person setConnection(Connection conn) {
-        this.conn = conn;
-        return this;
+    public List<Person> listAll() {
+        List<Person> persons = new ArrayList<>();
+
+        Database db = conn.getDatabase();
+
+        for (Document doc: db.getView(db.getClosedDocument(data.Person.class).getIndexName()).getAllDocuments()) {
+            persons.add((Person) personFactory.create(doc));
+        }
+
+        return persons;
+    }
+
+    public Person findById(String id) {
+
+        Database db = conn.getDatabase();
+        data.Person _person = db.getDocument(data.Person.class, id);
+        return _person.isOpen() ? new Person(_person) : null;
     }
 
     public void save() {

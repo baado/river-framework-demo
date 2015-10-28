@@ -2,16 +2,12 @@ package controllers;
 
 import lotus.domino.NotesThread;
 import models.Person;
-import org.riverframework.core.Database;
-import org.riverframework.core.Document;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import data.Connection;
 import views.html.persons.*;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,14 +16,14 @@ import java.util.List;
 public class Persons extends Controller {
 
     @Inject
-    Connection conn;
+    private Person _person;
 
     private final Form<Person> personForm = Form.form(Person.class);
 
     public Result list() {
         NotesThread.sinitThread();
 
-        List<Person> persons = Person.listAll(conn);
+        List<Person> persons = _person.listAll();
 
         NotesThread.stermThread();
 
@@ -41,7 +37,7 @@ public class Persons extends Controller {
     public Result details(String id) {
         NotesThread.sinitThread();
 
-        final Person person = Person.findById(conn, id);
+        final Person person = _person.findById(id);
         if (person == null) {
             flash("error", String.format("Person with id %s does not exist.", id));
             return redirect(routes.Persons.list());
@@ -64,7 +60,7 @@ public class Persons extends Controller {
         }
 
         Person person = boundForm.get();
-        person.setConnection(conn).save();
+        person.save();
 
         NotesThread.stermThread();
 
@@ -75,7 +71,7 @@ public class Persons extends Controller {
     public Result delete(String id) {
         NotesThread.sinitThread();
 
-        final Person person = Person.findById(conn, id);
+        final Person person = _person.findById(id);
         if(person == null) {
             flash("error", String.format("Person with id %s does not exist.", id));
             return redirect(routes.Persons.list());
