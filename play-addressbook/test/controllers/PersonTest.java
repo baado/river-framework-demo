@@ -6,6 +6,7 @@ import data.Database;
 import org.junit.Before;
 import org.junit.Test;
 import play.Play;
+import play.mvc.Http;
 import play.mvc.Result;
 import play.test.FakeApplication;
 import play.test.Helpers;
@@ -14,9 +15,9 @@ import play.test.WithApplication;
 import java.util.ArrayList;
 
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 import static play.test.Helpers.*;
-import static play.test.Helpers.running;
 
 /**
  * Created by mario.sotil on 10/31/2015.
@@ -32,7 +33,6 @@ public class PersonTest extends WithApplication {
     @Before
     public void reset() {
         Connection conn = Play.application().injector().instanceOf(Connection.class);
-
         Database database = conn.getDatabase();
         database.reset();
     }
@@ -61,14 +61,19 @@ public class PersonTest extends WithApplication {
 
     @Test
     public void save() {
-        Result result = routeAndCall(fakeRequest(POST, "/persons/P1004")
+        Http.RequestBuilder request = new Http.RequestBuilder()
+                .method(POST)
+                .uri("/persons/")
                 .bodyFormArrayValues(ImmutableMap.<String, String[]>builder()
                         .put("firstName", new String[]{"John"})
                         .put("lastName", new String[]{"Doe"})
                         .put("email", new String[]{"john.doe@riverframework.org"})
-                        .build()), 0);
+                        .build());
+        Result result = route(request);
+
         assertThat(result.status(), is(SEE_OTHER));
         assertThat(result.redirectLocation(), is(routes.Persons.list().url()));
+        assertThat(result.flash().get("success"), is(notNullValue()));
     }
 
     @Test

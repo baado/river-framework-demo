@@ -1,7 +1,9 @@
 package routes;
 
 import com.google.common.collect.ImmutableMap;
+import controllers.routes;
 import org.junit.Test;
+import play.mvc.Http;
 import play.mvc.Result;
 import play.test.FakeApplication;
 import play.test.Helpers;
@@ -19,7 +21,7 @@ import static play.test.Helpers.fakeApplication;
 /**
  * Created by mario.sotil on 10/29/2015.
  */
-public class IndexRouteTest extends WithApplication {
+public class RouteTest extends WithApplication {
 
     @Override
     protected play.Application provideApplication() {
@@ -29,13 +31,28 @@ public class IndexRouteTest extends WithApplication {
 
     @Test
     public void rootRoute() {
-        Result result = routeAndCall(fakeRequest(GET, "/"), 0);
-        assertThat(result, is(notNullValue()));
+        Http.RequestBuilder request = new Http.RequestBuilder()
+                .method(GET)
+                .uri("/");
+        Result result = route(request);
+        assertThat(result.status(), is(SEE_OTHER));
+        assertThat(result.redirectLocation(), is(routes.Persons.list().url()));    }
+
+    @Test
+    public void personsRoute() {
+        Http.RequestBuilder request = new Http.RequestBuilder()
+                .method(GET)
+                .uri("/persons/");
+        Result result = route(request);
+        assertThat(result.status(), is(OK));
     }
 
     @Test
     public void badRoute() {
-        Result result = routeAndCall(fakeRequest(GET, "/bad"), 0);
-        assertThat(result, is(nullValue()));
+        Http.RequestBuilder request = new Http.RequestBuilder()
+                .method(GET)
+                .uri("/bad");
+        Result result = route(request);
+        assertThat(result.status(), is(NOT_FOUND));
     }
 }
