@@ -11,9 +11,7 @@ libraryDependencies ++= Seq(
   cache,
   javaWs,
   "org.riverframework" % "river-lotus-domino" % "0.2.11",
-  "junit" % "junit" % "4.11",
-  "org.webjars" % "bootstrap" % "3.3.5",
-  "org.webjars" % "jquery" % "2.1.4"
+  "org.webjars" % "bootstrap" % "3.3.5"
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the

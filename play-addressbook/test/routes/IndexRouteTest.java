@@ -1,9 +1,8 @@
-package data;
+package routes;
 
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
-import org.riverframework.core.IndexedDatabase;
-import play.Play;
+import play.mvc.Result;
 import play.test.FakeApplication;
 import play.test.Helpers;
 import play.test.WithApplication;
@@ -12,14 +11,15 @@ import java.util.ArrayList;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
+import static play.test.Helpers.*;
 import static play.test.Helpers.fakeApplication;
-import static play.test.Helpers.running;
 
 /**
- * Created by mario.sotil on 10/28/2015.
+ * Created by mario.sotil on 10/29/2015.
  */
-public class DatabaseTest extends WithApplication {
+public class IndexRouteTest extends WithApplication {
 
     @Override
     protected play.Application provideApplication() {
@@ -28,12 +28,14 @@ public class DatabaseTest extends WithApplication {
     }
 
     @Test
-    public void opening() {
-        Connection conn = Play.application().injector().instanceOf(Connection.class);
+    public void rootRoute() {
+        Result result = routeAndCall(fakeRequest(GET, "/"), 0);
+        assertThat(result, is(notNullValue()));
+    }
 
-        IndexedDatabase database = conn.getDatabase();
-
-        assertThat(database, is(notNullValue()));
-        assertThat(database.isOpen(), is(true));
+    @Test
+    public void badRoute() {
+        Result result = routeAndCall(fakeRequest(GET, "/bad"), 0);
+        assertThat(result, is(nullValue()));
     }
 }
