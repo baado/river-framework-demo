@@ -5,20 +5,24 @@ import com.google.inject.assistedinject.AssistedInject;
 import data.Connection;
 import org.riverframework.core.Database;
 import org.riverframework.core.Document;
+import org.riverframework.core.DocumentIterator;
 import play.Logger;
 import play.Play;
 import play.data.validation.Constraints;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Person implements PersonInterface {
 
     private Connection conn;
     private data.Person _person;
 
-    @Inject private PersonFactory personFactory;
+    @Inject
+    private PersonFactory personFactory;
 
     public String id;
     @Constraints.Required
@@ -51,13 +55,12 @@ public class Person implements PersonInterface {
     }
 
     public List<Person> listAll() {
-        List<Person> persons = new ArrayList<>();
-
         Database db = conn.getDatabase();
+        DocumentIterator it = db.getView(db.getClosedDocument(data.Person.class).getIndexName()).getAllDocuments();
+        Iterable<Document> iterable = () -> it;
+        Stream<Document> stream = StreamSupport.stream(iterable.spliterator(), false);
 
-        for (Document doc: db.getView(db.getClosedDocument(data.Person.class).getIndexName()).getAllDocuments()) {
-            persons.add((Person) personFactory.create(doc));
-        }
+        List<Person> persons = stream.map(doc -> (Person) personFactory.create(doc)).collect(Collectors.toList());
 
         return persons;
     }
@@ -65,8 +68,8 @@ public class Person implements PersonInterface {
     public Person findById(String id) {
 
         Database db = conn.getDatabase();
-        data.Person _person = db.getDocument(data.Person.class, id);
-        return _person.isOpen() ? new Person(_person) : null;
+        data.Person p = db.getDocument(data.Person.class, id);
+        return p.isOpen() ? new Person(p) : null;
     }
 
     public void save() {

@@ -3,12 +3,15 @@ package controllers;
 import lotus.domino.NotesThread;
 import models.Person;
 import play.data.Form;
+import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.persons.*;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Created by mario.sotil on 10/15/2015.
@@ -21,13 +24,19 @@ public class Persons extends Controller {
     private final Form<Person> personForm = Form.form(Person.class);
 
     public Result list() {
-        NotesThread.sinitThread();
+        // Considering that Play 2.4 manage the actions asynchronously by default
+        // (https://www.playframework.com/documentation/2.4.x/JavaAsync) the calling
+        // to listAll as a promise it's just for testing, since we are not doing
+        // anything apart to load the list of registered persons.
 
-        List<Person> persons = _person.listAll();
+        F.Promise<List<Person>> promise = F.Promise.promise(() -> {
+            NotesThread.sinitThread();
+            List<Person> persons = _person.listAll();
+            NotesThread.stermThread();
+            return persons;
+        });
 
-        NotesThread.stermThread();
-
-        return ok(list.render(persons));
+        return ok(list.render(promise.get(1000)));
     }
 
     public Result newPerson() {
